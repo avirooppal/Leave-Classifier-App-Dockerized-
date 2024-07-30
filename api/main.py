@@ -5,11 +5,11 @@ import numpy as np
 from io import BytesIO
 from PIL import Image
 import tensorflow as tf
-from keras import layers
-from tensorflow import keras
 
+# Define the FastAPI app
 app = FastAPI()
 
+# CORS settings
 origins = [
     "http://localhost",
     "http://localhost:3000",
@@ -22,35 +22,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-tfsm_layer = tf.keras.layers.TFSMLayer('../models/2', call_endpoint='serving_default')
-
+# Load TensorFlow Serving model layer
+tfsm_layer = tf.keras.layers.TFSMLayer('./models/2', call_endpoint='serving_default')
 MODEL = tf.keras.Sequential([tfsm_layer])
 
+# Define class names
 CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 
-
+# Function to read and convert uploaded file to an image array
 def read_file_as_image(data) -> np.ndarray:
     image = np.array(Image.open(BytesIO(data)))
     return image
 
+# Prediction endpoint
 @app.post("/predict")
-async def predict(
-    file: UploadFile = File(...)
-):
+async def predict(file: UploadFile = File(...)):
     image = read_file_as_image(await file.read())
-    img_batch = np.expand_dims(image, 0)
-    
+    img_batch = np.expand_dims(image, 0)  # Expand dimensions to match model input
+
     predictions = MODEL.predict(img_batch)
     print(predictions)  # Keep this for debugging
-    
-    # Assuming predictions is a dictionary with a key that contains the actual prediction array
-    # The key name may vary, so let's get the first value in the dictionary
-    prediction_array = list(predictions.values())[0]
-    
-    # Convert to numpy array if it's not already
-    prediction_array = np.array(prediction_array)
-    
-    # Now we can process it as before
+
+    # Process predictions
+    prediction_array = list(predictions.values())[0]  # Get the first value in the dictionary
+
+    prediction_array = np.array(prediction_array)  # Convert to numpy array if it's not already
+
     if prediction_array.ndim == 2:
         predicted_class = CLASS_NAMES[np.argmax(prediction_array[0])]
         confidence = float(np.max(prediction_array[0]))
@@ -59,11 +56,12 @@ async def predict(
         confidence = float(np.max(prediction_array))
     else:
         raise ValueError(f"Unexpected predictions shape: {prediction_array.shape}")
-    
+
     return {
         'class': predicted_class,
         'confidence': confidence
     }
 
+# Run the app
 if __name__ == "__main__":
     uvicorn.run(app, host='localhost', port=8000)

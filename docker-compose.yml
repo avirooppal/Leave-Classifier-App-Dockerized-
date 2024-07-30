@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    image: avirooppal/frontend-disease-potato:latest
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./api
+    image: avirooppal/backend-disease-potato:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models
+
+networks:
+  default:
+    name: potato-disease-network
