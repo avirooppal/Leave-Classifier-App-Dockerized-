@@ -2,7 +2,7 @@
 
 For you machine have the following steps:
 Create a docker-compose.yml file with the following content:
-'''
+```
 version: '3.8'
 
 services:
@@ -24,15 +24,15 @@ networks:
   default:
     name: potato-disease-network
 
-'''
+```
 
 Then :
-'''
+```
 docker-compose pull
-'''
+```
 
 &
 
-'''
+```
 docker-compose up 
-'''
+```
