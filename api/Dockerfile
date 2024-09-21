@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the requirements.txt from the current folder (api) to /app
-COPY requirements.txt .  
+COPY ./requirements.txt .  
 # This looks correct, just confirm it exists in the right place
 
 # Install Python dependencies
