@@ -152,14 +152,30 @@ export const ImageUpload = () => {
   const [isLoading, setIsloading] = useState(false);
   let confidence = 0;
 
+  // const sendFile = async () => {
+  //   if (image) {
+  //     console.log(`${process.env.REACT_APP_API_URL}/predict`)
+  //     let formData = new FormData();
+  //     formData.append("file", selectedFile);
+  //     let res = await axios({
+  //       method: "post",
+  //       url: `${process.env.REACT_APP_API_URL}/predict`,
+  //       data: formData,
+  //     });
+  //     if (res.status === 200) {
+  //       setData(res.data);
+  //     }
+  //     setIsloading(false);
+  //   }
+  // }
   const sendFile = async () => {
     if (image) {
-      console.log(`${process.env.REACT_APP_API_URL}/predict`)
+      console.log(`https://classifier-leaves.onrender.com/predict`); // Your hosted model URL
       let formData = new FormData();
       formData.append("file", selectedFile);
       let res = await axios({
         method: "post",
-        url: `${process.env.REACT_APP_API_URL}/predict`,
+        url: `https://classifier-leaves.onrender.com/predict`, // Replace with your link
         data: formData,
       });
       if (res.status === 200) {
@@ -168,6 +184,7 @@ export const ImageUpload = () => {
       setIsloading(false);
     }
   }
+  
 
   const clearData = () => {
     setData(null);
