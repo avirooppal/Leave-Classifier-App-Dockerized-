@@ -23,7 +23,7 @@ app.add_middleware(
 )
 
 # Load TensorFlow Serving model layer
-tfsm_layer = tf.keras.layers.TFSMLayer('./models/2', call_endpoint='serving_default')
+tfsm_layer = tf.keras.layers.TFSMLayer('../models/2', call_endpoint='serving_default')
 MODEL = tf.keras.Sequential([tfsm_layer])
 
 # Define class names
@@ -57,6 +57,10 @@ async def predict(file: UploadFile = File(...)):
     else:
         raise ValueError(f"Unexpected predictions shape: {prediction_array.shape}")
 
+    print({
+        'class': predicted_class,
+        'confidence': confidence
+    })
     return {
         'class': predicted_class,
         'confidence': confidence

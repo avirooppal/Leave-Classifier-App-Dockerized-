@@ -154,11 +154,12 @@ export const ImageUpload = () => {
 
   const sendFile = async () => {
     if (image) {
+      console.log(`${process.env.REACT_APP_API_URL}/predict`)
       let formData = new FormData();
       formData.append("file", selectedFile);
       let res = await axios({
         method: "post",
-        url: "/predict",
+        url: `${process.env.REACT_APP_API_URL}/predict`,
         data: formData,
       });
       if (res.status === 200) {

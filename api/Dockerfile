@@ -9,18 +9,19 @@ RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy and install Python dependencies
-COPY requirements.txt .
+# Copy the requirements.txt from the current folder (api) to /app
+COPY requirements.txt .  
+# This looks correct, just confirm it exists in the right place
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code
-COPY . .
+# Copy the rest of the application code (everything inside api)
+COPY . .  
+# Make sure this copies from the correct folder
 
-
-
-# If there are any additional files or directories in the model folder, you may need to copy them as well
-# COPY models/2/variables /app/models/2/variables
-
+# Expose the port FastAPI will run on
 EXPOSE 8000
 
+# Run FastAPI app
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
