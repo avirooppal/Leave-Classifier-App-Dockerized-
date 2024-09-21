@@ -23,7 +23,7 @@ app.add_middleware(
 )
 
 # Load TensorFlow Serving model layer
-tfsm_layer = tf.keras.layers.TFSMLayer('./models/2', call_endpoint='serving_default')
+tfsm_layer = tf.keras.layers.TFSMLayer('model/2', call_endpoint='serving_default')
 MODEL = tf.keras.Sequential([tfsm_layer])
 
 # Define class names
